@@ -392,7 +392,7 @@ MonoBehaviour:
   ActiveLights: []
   CurrentTrafficTarget: {fileID: 0}
   SeekSteeringWeight: 0.13
-  ArriveSteeringWeight: 2.95
+  ArriveSteeringWeight: 7.77
   ArriveDistance: 2.34
   Force: {x: 0, y: 0, z: 0}
   Acc: {x: 0, y: 0, z: 0}

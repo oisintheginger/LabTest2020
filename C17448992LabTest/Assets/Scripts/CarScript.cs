@@ -66,6 +66,7 @@ public class CarScript : MonoBehaviour
 
         GreenTrafficListGenerator(ActiveLights, TrafficLightParent.GetComponent<TrafficLightGenerator>().trafficPointsLightList);
 
+        //simple way of weighting the behaviours
         Force = (SeekForce(CurrentTrafficTarget.transform.position) * SeekSteeringWeight) + 
                 (ArriveForce(CurrentTrafficTarget.transform.position, ArriveDistance) * ArriveSteeringWeight);
 
@@ -81,8 +82,6 @@ public class CarScript : MonoBehaviour
         }
         transform.position += Vel * Time.deltaTime;
         Vel *= (1.0f - (damping * Time.deltaTime));
-        
-        
     }
 
     void GreenTrafficListGenerator(List<GameObject> ClearList, List<GameObject> AddfromList)
