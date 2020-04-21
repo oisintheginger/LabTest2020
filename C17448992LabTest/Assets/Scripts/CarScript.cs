@@ -6,6 +6,7 @@ public class CarScript : MonoBehaviour
 {
     public GameObject TrafficLightParent;
 
+
     public List<GameObject> ActiveLights;
 
     public GameObject CurrentTrafficTarget;
@@ -29,6 +30,7 @@ public class CarScript : MonoBehaviour
 
     private void Start()
     {
+
         //Setting Up
         this.gameObject.GetComponent<MeshRenderer>().material.color = Color.cyan;
         CurrentTrafficTarget = this.gameObject;
@@ -77,8 +79,8 @@ public class CarScript : MonoBehaviour
 
         if (Vel.magnitude > 0.001f)
         {
-            Vector3 BankingUp = Vector3.Lerp(transform.up, Vector3.up + (Acc * banking), Time.deltaTime * 2.0f);
-            transform.LookAt(transform.position + Vel, BankingUp);
+            Vector3 bankUp = Vector3.Lerp(transform.up, Vector3.up + (Acc * banking), Time.deltaTime * 2.0f);
+            transform.LookAt(transform.position + Vel, bankUp);
         }
         transform.position += Vel * Time.deltaTime;
         Vel *= (1.0f - (damping * Time.deltaTime));
@@ -107,7 +109,7 @@ public class CarScript : MonoBehaviour
     //Picking a random integer
     void ChooseNewPoint()
     {
-        int Picker = Random.Range(0, ActiveLights.Count-1);
+        int Picker = Random.Range(0, ActiveLights.Count);
         CurrentTrafficTarget = ActiveLights[Picker];
     }
 
