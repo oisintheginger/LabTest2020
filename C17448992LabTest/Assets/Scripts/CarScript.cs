@@ -29,7 +29,7 @@ public class CarScript : MonoBehaviour
 
     private void Start()
     {
-        
+        this.gameObject.GetComponent<MeshRenderer>().material.color = Color.cyan;
         CurrentTrafficTarget = this.gameObject;
         foreach(GameObject trafficLight in TrafficLightParent.GetComponent<TrafficLightGenerator>().trafficPointsLightList)
         {
@@ -48,41 +48,51 @@ public class CarScript : MonoBehaviour
     {
         //Choosing new target when conditions met
         if(Vector3.Distance(this.gameObject.transform.position, CurrentTrafficTarget.transform.position)<=0.5f
-            ||CurrentTrafficTarget.GetComponent<TrafficLight>().myState != TrafficLight.TrafficState.Green)
+            ||CurrentTrafficTarget.GetComponent<TrafficLight>().myState != TrafficLight.TrafficState.Green
+            )
         {
-            ChooseNewPoint();
+            if (ActiveLights.Count > 0)
+            {
+                ChooseNewPoint();
+            }
+            else // setting target to the car itself when the Active List is empty
+            {
+                CurrentTrafficTarget = this.gameObject;
+            }
         }
 
         GreenTrafficListGenerator(ActiveLights, TrafficLightParent.GetComponent<TrafficLightGenerator>().trafficPointsLightList);
 
         Force = (SeekForce(CurrentTrafficTarget.transform.position) * SeekSteeringWeight) + 
                 (ArriveForce(CurrentTrafficTarget.transform.position, ArriveDistance) * ArriveSteeringWeight);
-        
-        Vector3 newAcceleration = Force / mass;
-        Acc = Vector3.Lerp(Acc, newAcceleration, Time.deltaTime);
+
+        Acc = Force / mass;
         Vel += Acc * Time.deltaTime;
 
         Vel = Vector3.ClampMagnitude(Vel, maxSpeed);
 
-        if (Vel.magnitude > float.Epsilon) // allows movement above zero mark, removing issue of infinitely turning to look at transform
+        if (Vel.magnitude > 0.001f)
         {
-            Vector3 tempUp = Vector3.Lerp(transform.up, Vector3.up + (Acc * banking), Time.deltaTime * 3.0f);
-            transform.LookAt(transform.position + Vel, tempUp);
-
-            transform.position += Vel * Time.deltaTime;
-            Vel *= (1.0f - (damping * Time.deltaTime));
+            Vector3 BankingUp = Vector3.Lerp(transform.up, Vector3.up + (Acc * banking), Time.deltaTime * 2.0f);
+            transform.LookAt(transform.position + Vel, BankingUp);
         }
+        transform.position += Vel * Time.deltaTime;
+        Vel *= (1.0f - (damping * Time.deltaTime));
+        
+        
     }
 
     void GreenTrafficListGenerator(List<GameObject> ClearList, List<GameObject> AddfromList)
     {
-        foreach(GameObject inputLight in ClearList)
+        //clearing from active lights
+        for(int i = 0; i< ActiveLights.Count; i++)
         {
-            if (inputLight.GetComponent<TrafficLight>().myState != TrafficLight.TrafficState.Green)
+            if(ActiveLights[i].GetComponent<TrafficLight>().myState != TrafficLight.TrafficState.Green)
             {
-                ActiveLights.Remove(inputLight);
+                ActiveLights.Remove(ActiveLights[i]);
             }
         }
+        //adding green lights from traffic lights parent to active lights list
         foreach(GameObject trafficLight  in AddfromList)
         {
             if(trafficLight.GetComponent<TrafficLight>().myState == TrafficLight.TrafficState.Green && !ActiveLights.Contains(trafficLight))
@@ -92,9 +102,10 @@ public class CarScript : MonoBehaviour
         }
     }
 
+    //Picking a random integer, recursive so that it doesnt pick the same point as the current target
     void ChooseNewPoint()
     {
-        int Picker = Random.Range(0, ActiveLights.Count);
+        int Picker = Random.Range(0, ActiveLights.Count-1);
         CurrentTrafficTarget = ActiveLights[Picker];
     }
 
