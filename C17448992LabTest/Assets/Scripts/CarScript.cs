@@ -114,7 +114,7 @@ public class CarScript : MonoBehaviour
 
 
     //Steering Behaviours from lecture notes
-    public Vector3 SeekForce(Vector3 target)
+    Vector3 SeekForce(Vector3 target)
     {
         Vector3 desired = target - transform.position;
         desired.Normalize();
@@ -122,7 +122,7 @@ public class CarScript : MonoBehaviour
         return desired - Vel;
     }
 
-    public Vector3 ArriveForce(Vector3 target, float slowingDistance = 15.0f)
+    Vector3 ArriveForce(Vector3 target, float slowingDistance = 15.0f)
     {
         Vector3 toTarget = target - transform.position;
 
