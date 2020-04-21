@@ -11,6 +11,7 @@ public class TrafficLight : MonoBehaviour
         Red
     };
 
+    //allows car to reference the state of the traffic light
     public TrafficState myState;
 
 

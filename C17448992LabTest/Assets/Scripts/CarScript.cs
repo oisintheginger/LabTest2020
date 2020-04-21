@@ -29,8 +29,11 @@ public class CarScript : MonoBehaviour
 
     private void Start()
     {
+        //Setting Up
         this.gameObject.GetComponent<MeshRenderer>().material.color = Color.cyan;
         CurrentTrafficTarget = this.gameObject;
+
+        //Adding everythin to the active list in order to clear it
         foreach(GameObject trafficLight in TrafficLightParent.GetComponent<TrafficLightGenerator>().trafficPointsLightList)
         {
             ActiveLights.Add(trafficLight);
@@ -102,13 +105,15 @@ public class CarScript : MonoBehaviour
         }
     }
 
-    //Picking a random integer, recursive so that it doesnt pick the same point as the current target
+    //Picking a random integer
     void ChooseNewPoint()
     {
         int Picker = Random.Range(0, ActiveLights.Count-1);
         CurrentTrafficTarget = ActiveLights[Picker];
     }
 
+
+    //Steering Behaviours from lecture notes
     public Vector3 SeekForce(Vector3 target)
     {
         Vector3 desired = target - transform.position;
