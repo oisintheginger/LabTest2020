@@ -387,18 +387,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   TrafficLightParent: {fileID: 83551960}
+  ActiveLights: []
   CurrentTrafficTarget: {fileID: 0}
-  SeekSteeringWeight: 1.76
-  ArriveSteeringWeight: 4.09
+  SeekSteeringWeight: 0.13
+  ArriveSteeringWeight: 0.62
   ArriveDistance: 3.16
   Force: {x: 0, y: 0, z: 0}
   Acc: {x: 0, y: 0, z: 0}
   Vel: {x: 0, y: 0, z: 0}
   mass: 1
-  damping: 0.01
-  banking: 0.1
+  damping: 0
+  banking: 0.019
   maxSpeed: 5
-  maxForce: 10
+  maxForce: 45.35
 --- !u!23 &707889192
 MeshRenderer:
   m_ObjectHideFlags: 0
